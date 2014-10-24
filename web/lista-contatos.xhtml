@@ -6,7 +6,7 @@
 
     <ui:define name="conteudo">
         <h:form>
-
+            <h:button value="Novo Contato" outcome="cadastro-contatos"/>
             <h:dataTable value="#{listaContatosBean.contatos}" var="contato" border="1">
                 <f:facet name="header">Lista de Contatos</f:facet>
 
@@ -16,8 +16,8 @@
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Data de Nascimento</f:facet>
-                        #{contato.dataNascimento.time}
+                    <f:facet name="header">Data de Nascimento</f:facet>                   
+                       #{contato.dataNascimento.time}                       
                 </h:column>
 
                 <h:column>
@@ -31,12 +31,15 @@
                 </h:column>
 
                 <h:column>
-                    <h:link value="Editar" outcome="cadastro-contatos">
+                    <h:link outcome="cadastro-contatos">
                         <f:param name="id" value="#{contato.id}"/>
+                        <img src="img/editar.png" alt="Editar" title="Editar"/>
                     </h:link>
                 </h:column>
                 <h:column>
-                    <h:commandLink value="Excluir" action="#{listaContatosBean.remove(contato)}"/>
+                    <h:commandLink action="#{listaContatosBean.remove(contato)}">
+                        <img src="img/excluir.png" alt="Excluir" title="Excluir"/>
+                    </h:commandLink>
                 </h:column>
             </h:dataTable>
         </h:form>

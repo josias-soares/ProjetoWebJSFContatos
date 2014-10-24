@@ -6,6 +6,8 @@
 package webjsf.controller;
 
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import webjsf.modelo.Contato;
@@ -24,6 +26,5 @@ public class ListaContatosBean {
     public void remove(Contato contato){
         new ContatoDao().deleta(contato);
     }
-
-
+       
 }

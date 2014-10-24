@@ -7,8 +7,10 @@ package webjsf.controller;
 
 import java.sql.SQLException;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
 import webjsf.dao.ContatoDao;
 import webjsf.modelo.Contato;
 
@@ -44,9 +46,24 @@ public class CadastroContatoBean {
         this.contato = contato;
     }
     
-    public String grava(){        
+    public String grava(){ 
+        
+         if(contato.getNome() == null) {
+            FacesMessage message = new FacesMessage("O nome deve ser definido.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        
+        if(contato.getDataNascimento() == null){
+            FacesMessage message = new FacesMessage("A data de nascimento deve ser definida.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+
+        if(contato.getNome() == null || contato.getDataNascimento() == null){
+            return null;
+        }
+
         try {
-            if(contato.getId() == null){
+            if(contato.getId() == 0 || contato.getId() == null ){
                 new ContatoDao().adiciona(contato);
             }else{
                 new ContatoDao().altera(contato);

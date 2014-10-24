@@ -51,7 +51,7 @@ public class Contato {
         this.endereco = endereco;
     }
 
-    public Calendar getDataNascimento() {
+    public Calendar getDataNascimento() { 
         return dataNascimento;
     }
 

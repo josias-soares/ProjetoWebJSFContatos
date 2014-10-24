@@ -5,6 +5,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
         <title>Agenda</title>
+        <link rel="stylesheet" type="text/css" href="css/estilo.css"/>
     </h:head>
     <h:body>  
         <ui:insert name="cabecalho">
@@ -12,27 +13,43 @@
                 <h1>
                     Agenda de contatos
                 </h1>
+                <table border-right="1">
+                    <tbody>
+                        <tr>
+                            <td><h:link value="Lista de contatos" outcome="lista-contatos"/>|</td>
+
+                            <td><h:link value="Cadastro de contatos" outcome="cadastro-contatos"/>|</td>         
+                            <td><h:link value="Principal" outcome="index"/></td>
+                        </tr>
+                    </tbody>
+                </table> 
             </center>
-            <table border="1">
-                <tbody>
-                    <tr>
-                        <td><h:link value="Lista de contatos" outcome="lista-contatos"/></td>
-                        <td><h:link value="Cadastro de contatos" outcome="cadastro-contatos"/></td>
-                        <td><h:link value="Principal" outcome="index"/></td>
-                    </tr>
-                </tbody>
-            </table> 
         </ui:insert>
+
+        <br></br>
+ 
+         <h:messages globalOnly="true" class="msg"/>
         
-            
-        <ui:insert name="conteudo">
-            <h1>
-                Bem Vindo!
-            </h1>
-        </ui:insert>
-        
+        <hr></hr> 
+
+        <center>
+
+            <ui:insert name="conteudo">
+                <h1>
+                    Bem Vindo!
+                </h1>
+            </ui:insert>
+
+        </center>
+
+        <br></br>
+        <hr></hr>
+
         <ui:insert name="rodape">
-            Todos os direitos reservados SATC 2014.
+            <h5>
+                Todos os direitos reservados SATC 2014.
+            </h5>
+
         </ui:insert>
     </h:body>
 </html>
