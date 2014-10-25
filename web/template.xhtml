@@ -13,13 +13,20 @@
                 <h1>
                     Agenda de contatos
                 </h1>
+                
+                <br>
+                    <h:form>
+                        <p>Usuário logado: #{loginBean.usuario}</p> 
+                    </h:form>    
+                </br>
                 <table border-right="1">
                     <tbody>
                         <tr>
                             <td><h:link value="Lista de contatos" outcome="lista-contatos"/>|</td>
 
                             <td><h:link value="Cadastro de contatos" outcome="cadastro-contatos"/>|</td>         
-                            <td><h:link value="Principal" outcome="index"/></td>
+                            <td><h:link value="Principal" outcome="index"/>|</td>
+                            <td><h:form><h:commandLink value="Logout" action="#{loginBean.logout}"/></h:form></td>
                         </tr>
                     </tbody>
                 </table> 
@@ -27,9 +34,9 @@
         </ui:insert>
 
         <br></br>
- 
-         <h:messages globalOnly="true" class="msg"/>
-        
+
+        <h:messages globalOnly="true" class="msg"/>
+
         <hr></hr> 
 
         <center>

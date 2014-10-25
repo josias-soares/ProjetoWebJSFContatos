@@ -23,7 +23,7 @@
     
     <welcome-file-list>
         <welcome-file>
-            index.xhtml
+            login.xhtml
         </welcome-file>
     </welcome-file-list>
     
@@ -33,6 +33,16 @@
         </param-name>
         <param-value>true</param-value>
     </context-param>
+    
+    <!--  <filter>
+        <filter-name>Login</filter-name>
+        <filter-class>webjsf.controller.LoginFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>/login</filter-name>
+        <url-pattern>/login.xhtml</url-pattern>
+    </filter-mapping> -->
     
 </web-app>
 
