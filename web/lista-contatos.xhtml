@@ -16,8 +16,10 @@
                 </h:column>
 
                 <h:column>
-                    <f:facet name="header">Data de Nascimento</f:facet>                   
-                       #{contato.dataNascimento.time}                       
+                    <f:facet name="header">Data de Nascimento</f:facet>
+                    <h:outputText value="#{contato.dataNascimento.time}">
+                        <f:convertDateTime parent="dd/MM/yyyy"/>
+                    </h:outputText>                 
                 </h:column>
 
                 <h:column>
@@ -25,9 +27,11 @@
                         #{contato.endereco}
                 </h:column>
 
+
                 <h:column>
                     <f:facet name="header">Email</f:facet>
-                        #{contato.email}
+                    <h:outputLink value="mailto:#{contato.email}" 
+                                  target="_blank">#{contato.email}</h:outputLink>
                 </h:column>
 
                 <h:column>

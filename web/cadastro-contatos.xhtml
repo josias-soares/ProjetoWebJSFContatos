@@ -7,25 +7,53 @@
     <ui:define name="conteudo">
         <h:form>
 
-            <h:panelGrid columns="2">               
-                <h:outputLabel value="Nome: " for="nome"/>
-                <h:inputText id="nome" value="#{cadastroContatoBean.contato.nome}"/>
+            <h:panelGrid columns="3">               
+                <h:outputLabel value="Nome: " 
+                               for="nome"/>
+                <h:inputText id="nome" 
+                             value="#{cadastroContatoBean.contato.nome}" 
+                             required="true"                              
+                             label="Nome"/>
+                <h:messages class="msg" for="nome"/>
 
-                <h:outputLabel value="Data de Nascimento: " for="dataNascimento"/>
-                <h:inputText id="dataNascimento" value="#{cadastroContatoBean.contato.dataNascimento}">
+                <h:outputLabel value="Data de Nascimento: " 
+                               for="dataNascimento"/>
+                <h:inputText id="dataNascimento" 
+                             value="#{cadastroContatoBean.contato.dataNascimento}" 
+                             required="true"                              
+                             label="Data de nascimento">
                     <f:converter converterId="dateCalendarConverter"/>
                 </h:inputText>
+                <h:messages class="msg" for="dataNascimento"/>
 
-                <h:outputLabel value="Endereço: " for="endereco"/>
-                <h:inputText id="endereco" value="#{cadastroContatoBean.contato.endereco}"/> 
+                <h:outputLabel value="Endereço: " 
+                               for="endereco"/>
+                <h:inputText id="endereco" 
+                             value="#{cadastroContatoBean.contato.endereco}" 
+                             required="true"                              
+                             label="Endereço" /> 
+                <h:messages class="msg"  for="endereco"/>
 
-                <h:outputLabel value="Email: " for="email"/>
-                <h:inputText id="email" value="#{cadastroContatoBean.contato.email}"/> 
+                <h:outputLabel value="Email: "                               
+                               for="email"/>
+                <h:inputText id="email" 
+                             value="#{cadastroContatoBean.contato.email}" 
+                             required="true"                              
+                             label="Email" 
+                             validatorMessage="O email é inválido"
+                             valueChangeListener="#{cadastroContatoBean.emailChanged}" 
+                             onchange="submit()">
+                    <f:validateRegex pattern="[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}" />
+                </h:inputText>
+                <h:messages class="msg" for="email"/>
 
-                <h:commandButton value=" Gravar " action="#{cadastroContatoBean.grava}"/>
-                <h:button value="Lista de Contatos" outcome="lista-contatos"/>
-                <h:inputHidden  value="#{cadastroContatoBean.contato.id}"/>
+                <h:commandButton value=" Gravar " 
+                                 action="#{cadastroContatoBean.grava}"/>
+                <h:button value="Lista de Contatos" 
+                          outcome="lista-contatos"/>
                 
+                <h:inputHidden id="id" value="#{cadastroContatoBean.contato.id}"/>
+
             </h:panelGrid>
 
         </h:form>

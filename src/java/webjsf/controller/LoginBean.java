@@ -15,13 +15,6 @@ public class LoginBean {
 
     //GETTERS e SETTERS
     public String login() {
-        if (usuario == null) {
-            //Mensagens de validação
-            FacesMessage message = new FacesMessage("O usuário deve ser definido.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-            return null;
-        }
-
         if ("admin".equals(usuario) && !"123".equals(senha)) {
             //Mensagens de validação
             FacesMessage message = new FacesMessage("O usuário não existe ou a senha é inválida.");

@@ -43,19 +43,19 @@ public class ContatoDao {
             List<Contato> contatos = new ArrayList<Contato>();
             try (PreparedStatement stmt = connection.prepareStatement("select * from contatos order by nome")) {
                 ResultSet rs = stmt.executeQuery();
-                
+
                 while (rs.next()) {
-                    
+
                     Contato contato = new Contato();
                     contato.setId(rs.getLong("id"));
                     contato.setNome(rs.getString("nome"));
                     contato.setEmail(rs.getString("email"));
                     contato.setEndereco(rs.getString("endereco"));
-                    
+
                     Calendar data = Calendar.getInstance();
                     data.setTime(rs.getDate("dataNascimento"));
                     contato.setDataNascimento(data);
-                    
+
                     contatos.add(contato);
                 }
                 rs.close();
@@ -77,7 +77,7 @@ public class ContatoDao {
             if (set.next()) {
                 return set.getLong(1) + 1;
             }
-        } 
+        }
         return 1L;
     }
 
@@ -116,7 +116,7 @@ public class ContatoDao {
         String sql = "DELETE FROM CONTATOS WHERE ID = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setLong(1, contato.getId());   
+            stmt.setLong(1, contato.getId());
             stmt.execute();
 
         } catch (SQLException e) {
@@ -145,6 +145,33 @@ public class ContatoDao {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public Contato buscarPorEmail(String email) throws SQLException {
+        String sql = "select * from contatos "
+                + " where email = ? ";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, email);
+            Contato contato = null;
+
+            try (ResultSet resultSet = pstm.executeQuery()) {
+                if (resultSet.next()) {
+                    contato = new Contato();
+                    contato.setId(resultSet.getLong("id"));
+                    contato.setNome(resultSet.getString("nome"));
+                    contato.setEmail(resultSet.getString("email"));
+                    contato.setEndereco(resultSet.getString("endereco"));
+                    if (resultSet.getDate("dataNascimento") != null) {
+                        Calendar dataNascimento = Calendar.getInstance();
+                        dataNascimento.setTime(resultSet.getDate("dataNascimento"));
+
+                        contato.setDataNascimento(dataNascimento);
+                    }
+                }
+            }
+            return contato;
         }
     }
 

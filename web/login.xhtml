@@ -7,13 +7,21 @@
     <ui:define name="conteudo">
         <h:form>
             <h2>Entre com o login</h2>
-            <h:messages globalOnly="true"/>
-            <h:panelGrid columns="2">
-                <h:outputLabel value="Usuário: " for="usuario"/>
-                <h:inputText id="usuario" value="#{loginBean.usuario}"/>
+            
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Usuário: " for="usuario" />
+                <h:inputText id="usuario" value="#{loginBean.usuario}" 
+                             required="true"  
+                             label="Usuario"   
+                             requiredMessage="O usuário deve ser definido." />
+                <h:messages class="msg"  for="usuario" />
 
                 <h:outputLabel value="Senha: " for="senha"/>
-                <h:inputSecret id="senha" value="#{loginBean.senha}"/>
+                <h:inputSecret id="senha" value="#{loginBean.senha}" 
+                               required="true" 
+                               label="Senha" 
+                               requiredMessage="A senha deve ser definida."/>
+                <h:messages class="msg" for="senha" />
 
                 <h:commandButton value="Entrar" action="#{loginBean.login}"/>
             </h:panelGrid>
