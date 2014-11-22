@@ -36,13 +36,14 @@ public class ContatoDao {
             throw new RuntimeException(e);
         }
     }
-
-    public List<Contato> getLista() throws SQLException {
-
-        try {
-            List<Contato> contatos = new ArrayList<Contato>();
-            try (PreparedStatement stmt = connection.prepareStatement("select * from contatos order by nome")) {
-                ResultSet rs = stmt.executeQuery();
+    
+    public List<Contato> getLista(int offset, int limit) throws SQLException {
+        List<Contato> contatos = new ArrayList<>();
+        String sql = "select * from contatos OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try (PreparedStatement st = connection.prepareStatement(sql);) {
+            st.setInt(1, offset);
+            st.setInt(2, limit);
+            try (ResultSet rs = st.executeQuery()) {
 
                 while (rs.next()) {
 
@@ -65,6 +66,20 @@ public class ContatoDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+   
+    public int getTotal() throws SQLException {
+        String sql = "select count(id) from contatos ";
+
+        try (PreparedStatement st = connection.prepareStatement(sql)) {
+
+            ResultSet set = st.executeQuery();
+
+            if (set.next()) {
+                return set.getInt(1);
+            }
+        }
+        return 1;
     }
 
     public Long getProximoId() throws SQLException {
@@ -172,6 +187,37 @@ public class ContatoDao {
                 }
             }
             return contato;
+        }
+    }
+
+    public List<Contato> buscarPorNome(String nome) throws SQLException {
+        List<Contato> contatos = new ArrayList<>();
+        String sql = "select * from contatos "
+                + " where nome = ? ";
+
+        try (PreparedStatement pstm = connection.prepareStatement(sql)) {
+            pstm.setString(1, nome);
+
+            try (ResultSet rs = pstm.executeQuery()) {
+
+                while (rs.next()) {
+
+                    Contato contato = new Contato();
+                    contato.setId(rs.getLong("id"));
+                    contato.setNome(rs.getString("nome"));
+                    contato.setEmail(rs.getString("email"));
+                    contato.setEndereco(rs.getString("endereco"));
+
+                    Calendar data = Calendar.getInstance();
+                    data.setTime(rs.getDate("dataNascimento"));
+                    contato.setDataNascimento(data);
+
+                    contatos.add(contato);
+                }
+                rs.close();
+            }
+
+            return contatos;
         }
     }
 

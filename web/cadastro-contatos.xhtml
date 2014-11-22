@@ -1,62 +1,51 @@
-<ui:composition template="template.xhtml" 
-                xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="template.xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="conteudo">
         <h:form>
+            <p:growl id="messages" />
+            <h:inputHidden id="id" value="#{cadastroContatoBean.contato.id}"/>            
 
-            <h:panelGrid columns="3">               
-                <h:outputLabel value="Nome: " 
-                               for="nome"/>
-                <h:inputText id="nome" 
-                             value="#{cadastroContatoBean.contato.nome}" 
-                             required="true"                              
-                             label="Nome"/>
-                <h:messages class="msg" for="nome"/>
+            <fieldset>
+                <legend>Cadastro de Contatos</legend>
 
-                <h:outputLabel value="Data de Nascimento: " 
-                               for="dataNascimento"/>
-                <h:inputText id="dataNascimento" 
-                             value="#{cadastroContatoBean.contato.dataNascimento}" 
-                             required="true"                              
-                             label="Data de nascimento">
-                    <f:converter converterId="dateCalendarConverter"/>
-                </h:inputText>
-                <h:messages class="msg" for="dataNascimento"/>
+                <div class="form-group">
+                    <h:outputLabel value="Nome" for="nome"/>
+                    <h:inputText id="nome" styleClass="form-control" value="#{cadastroContatoBean.contato.nome}" label="Nome" required="true" pt:autofocus="true"/>
+                </div>
 
-                <h:outputLabel value="Endereço: " 
-                               for="endereco"/>
-                <h:inputText id="endereco" 
-                             value="#{cadastroContatoBean.contato.endereco}" 
-                             required="true"                              
-                             label="Endereço" /> 
-                <h:messages class="msg"  for="endereco"/>
+                <div class="form-group">
+                    <h:outputLabel value="Email" for="email"/>
+                    <div class="input-group">
+                        <span class="input-group-addon">@</span>                        
+                        <h:inputText id="email"  styleClass="form-control" value="#{cadastroContatoBean.contato.email}" label="Email" required="true" validatorMessage="O email é inválido" valueChangeListener="#{cadastroContatoBean.emailChanged}" >
+                            <f:validateRegex pattern="[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}" />
+                            <f:ajax render="@this messages" execute="@this id"/>
+                        </h:inputText>
+                    </div>
+                </div>
 
-                <h:outputLabel value="Email: "                               
-                               for="email"/>
-                <h:inputText id="email" 
-                             value="#{cadastroContatoBean.contato.email}" 
-                             required="true"                              
-                             label="Email" 
-                             validatorMessage="O email é inválido"
-                             valueChangeListener="#{cadastroContatoBean.emailChanged}" 
-                             onchange="submit()">
-                    <f:validateRegex pattern="[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\.[a-zA-Z]{2,4}" />
-                </h:inputText>
-                <h:messages class="msg" for="email"/>
+                <div class="form-group">
+                    <h:outputLabel value="Data de Nascimento" for="dataNascimento"/>
+                    <h:inputText id="dataNascimento" pt:type="date" styleClass="form-control"  value="#{cadastroContatoBean.contato.dataNascimento}" label="Data de Nascimento" required="true">
+                        <f:converter converterId="dateCalendarConverter"/>
+                        <f:ajax render="messages"/>
+                    </h:inputText>
+                </div>
 
-                <h:commandButton value=" Gravar " 
-                                 action="#{cadastroContatoBean.grava}"/>
-                <h:button value="Lista de Contatos" 
-                          outcome="lista-contatos"/>
-                
-                <h:inputHidden id="id" value="#{cadastroContatoBean.contato.id}"/>
+                <div class="form-group">
+                    <h:outputLabel value="Endereço" for="endereco"/>
+                    <h:inputText id="endereco" styleClass="form-control" label="Endereço" value="#{cadastroContatoBean.contato.endereco}"/>                
+                </div>
+            </fieldset>
 
-            </h:panelGrid>
-
+            <div class="btn-group">
+                <h:commandButton class="btn btn-primary" value="Enviar" action="#{cadastroContatoBean.grava}"/>
+                <h:button class="btn btn-default" value="Lista de Contatos" outcome="lista-contatos"/>
+            </div>
         </h:form>
     </ui:define>
-</ui:composition>   
-
+</ui:composition>

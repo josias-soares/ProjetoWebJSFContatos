@@ -1,54 +1,57 @@
-<ui:composition template="template.xhtml" 
-                xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="template.xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="conteudo">
+
         <h:form>
-            <h:button value="Novo Contato" outcome="cadastro-contatos"/>
-            <h:dataTable value="#{listaContatosBean.contatos}" var="contato" border="1">
-                <f:facet name="header">Lista de Contatos</f:facet>
+            <p:growl/>
+            <fieldset>
+                <legend>Lista de Contatos<h:button styleClass="btn btn-primary btn-sm navbar-right " value="Novo Contato" outcome="cadastro-contatos"/></legend>
 
-                <h:column>
-                    <f:facet name="header">Nome</f:facet>
-                        #{contato.nome}
-                </h:column>
+                <p:dataTable lazy="true" emptyMessage="Não há contatos" paginator="true" rows="3"  styleClass="table table-condensed table-hover" value="#{listaContatosBean.contatos}" var="contato">
+                    <p:column>
+                        <f:facet name="header">Nome</f:facet>
+                            #{contato.nome}
+                    </p:column>
 
-                <h:column>
-                    <f:facet name="header">Data de Nascimento</f:facet>
-                    <h:outputText value="#{contato.dataNascimento.time}">
-                        <f:convertDateTime parent="dd/MM/yyyy"/>
-                    </h:outputText>                 
-                </h:column>
+                    <p:column>
+                        <f:facet name="header">Dt.Nascimento</f:facet>
+                        <h:outputText value="#{contato.dataNascimento.time}">
+                            <f:convertDateTime parent="dd/MM/yyyy"/>
+                        </h:outputText>
+                    </p:column>
 
-                <h:column>
-                    <f:facet name="header">Endereço</f:facet>
-                        #{contato.endereco}
-                </h:column>
+                    <p:column>
+                        <f:facet name="header">Email</f:facet>
+                        <h:outputLink value="mailto:#{contato.email}" target="_blank">#{contato.email}</h:outputLink>
+                    </p:column>
 
+                    <p:column>
+                        <f:facet name="header">Endereço</f:facet>
+                            #{contato.endereco}
+                    </p:column>
 
-                <h:column>
-                    <f:facet name="header">Email</f:facet>
-                    <h:outputLink value="mailto:#{contato.email}" 
-                                  target="_blank">#{contato.email}</h:outputLink>
-                </h:column>
+                    <p:column>
+                        <f:facet name="header">Ações</f:facet>
+                        <h:link outcome="cadastro-contato">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            <f:param name="id" value="#{contato.id}"/>
+                        </h:link>
+                        <p:commandLink>
+                            <p:confirm header="Confirmação" message="Deseja realmente remover?" icon="ui-icon-alert" />
+                            <span class="glyphicon glyphicon-minus-sign"></span>
+                            <f:ajax listener="#{listaContatosBean.remove(contato)}" render="@form"/>
+                        </p:commandLink>
 
-                <h:column>
-                    <h:link outcome="cadastro-contatos">
-                        <f:param name="id" value="#{contato.id}"/>
-                        <img src="img/editar.png" alt="Editar" title="Editar"/>
-                    </h:link>
-                </h:column>
-                <h:column>
-                    <h:commandLink action="#{listaContatosBean.remove(contato)}">
-                        <img src="img/excluir.png" alt="Excluir" title="Excluir"/>
-                    </h:commandLink>
-                </h:column>
-            </h:dataTable>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
+                            <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+                            <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+                        </p:confirmDialog>   
+                    </p:column>
+                </p:dataTable>
+            </fieldset>
         </h:form>
     </ui:define>
-</ui:composition>   
-
-
-
+</ui:composition>

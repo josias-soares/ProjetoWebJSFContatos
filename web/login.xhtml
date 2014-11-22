@@ -1,31 +1,25 @@
-<ui:composition template="template.xhtml" 
-                xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>Agenda de Contatos</title>
+        <h:outputStylesheet name="css/bootstrap.min.css"/>
+        <h:outputStylesheet name="css/bootstrap-theme.min.css"/>
+        <h:outputStylesheet name="css/login.css"/>        
+    </h:head>
+    <h:body>
+        <h:form styleClass="form-signin">
+            <h2 class="form-signin-heading">Entre com o login</h2>
+            <h:messages infoClass="alert alert-info" warnClass="alert alert-warning" errorClass="alert alert-danger" />
 
-    <ui:define name="conteudo">
-        <h:form>
-            <h2>Entre com o login</h2>
-            
-            <h:panelGrid columns="3">
-                <h:outputLabel value="Usuário: " for="usuario" />
-                <h:inputText id="usuario" value="#{loginBean.usuario}" 
-                             required="true"  
-                             label="Usuario"   
-                             requiredMessage="O usuário deve ser definido." />
-                <h:messages class="msg"  for="usuario" />
+            <h:inputText pt:placeholder="Usuário" id="usuario" value="#{loginBean.usuario}" styleClass="form-control" required="true" label="Usuário" pt:autofocus="true"/>
+            <h:inputSecret pt:placeholder="Senha" id="senha" styleClass="form-control" value="#{loginBean.senha}"/>
 
-                <h:outputLabel value="Senha: " for="senha"/>
-                <h:inputSecret id="senha" value="#{loginBean.senha}" 
-                               required="true" 
-                               label="Senha" 
-                               requiredMessage="A senha deve ser definida."/>
-                <h:messages class="msg" for="senha" />
-
-                <h:commandButton value="Entrar" action="#{loginBean.login}"/>
-            </h:panelGrid>
+            <h:commandButton value="Entrar" styleClass="btn btn-lg btn-primary btn-block" action="#{loginBean.login}"/>
         </h:form>
+    </h:body>
+</html>
 
-    </ui:define>
-</ui:composition>  

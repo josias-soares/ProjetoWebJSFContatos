@@ -1,0 +1,13 @@
+.ui-inputfield{
+    height: 34px;
+}
+.calendar.form-control{
+    display: block;
+    width: 100%;
+    padding: initial;
+    border: none;
+    height: 100%;
+}    
+.calendar.form-control > .ui-inputfield{
+    width: 100%
+}     

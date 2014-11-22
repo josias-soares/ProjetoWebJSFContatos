@@ -4,27 +4,35 @@
  * and open the template in the editor.
  */
 package webjsf.controller;
-
+import java.io.Serializable;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
-import webjsf.modelo.Contato;
+import javax.faces.bean.ViewScoped;
 import webjsf.dao.ContatoDao;
+import webjsf.dao.ListaContatosDataModel;
+import webjsf.modelo.Contato;
 
-/**
- *
- * @author josias
- */
+
+@ViewScoped
 @ManagedBean
-public class ListaContatosBean {
-    public List<Contato> getContatos() throws SQLException{
-        return new ContatoDao().getLista();
-    } 
-    
-    public void remove(Contato contato){
+public class ListaContatosBean implements Serializable {
+
+    private ListaContatosDataModel dataModel;
+
+    public ListaContatosDataModel getContatos() {
+        if (dataModel == null) {
+            dataModel = new ListaContatosDataModel();
+        }
+
+        return dataModel;
+    }
+
+    public List<Contato> buscaPorNome(String nome) throws SQLException {
+        return new ContatoDao().buscarPorNome(nome);
+    }
+
+    public void remove(Contato contato) throws SQLException {
         new ContatoDao().deleta(contato);
     }
-       
 }

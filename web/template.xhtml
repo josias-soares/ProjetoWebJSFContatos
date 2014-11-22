@@ -1,63 +1,46 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:rf="http://java.sun.com/jsf/core"
+      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
-        <title>Agenda</title>
-        <link rel="stylesheet" type="text/css" href="css/estilo.css"/>
+        <title>Agenda de Contatos</title>
+
+        <h:outputStylesheet name="css/bootstrap.min.css"/>
+        <h:outputStylesheet name="css/bootstrap-theme.min.css"/>
+        <h:outputStylesheet name="css/bootstrap-fonts-jsf.css"/>
+        <h:outputStylesheet name="css/template.css"/>
+        <h:outputStylesheet name="css/prime-bootstrap.css"/>
+
     </h:head>
-    <h:body>  
-        <ui:insert name="cabecalho">
-            <center>
-                <h1>
-                    Agenda de contatos
-                </h1>
-                
-                <br>
-                    <h:form>
-                        <p>Usuário logado: #{loginBean.usuario}</p> 
-                    </h:form>    
-                </br>
-                <table border-right="1">
-                    <tbody>
-                        <tr>
-                            <td><h:link value="Lista de contatos" outcome="lista-contatos"/>|</td>
+    <h:body>
+        <div id="wrap">
+            <div id="header">
+                <!-- Fixed navbar -->
+                <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a class="navbar-brand" href="#">Agenda de Contatos</a>
+                        </div>
+                        <div class="navbar-right">
+                            <h:form styleClass="navbar-brand">
+                                @#{loginBean.usuario}
+                                <h:commandLink  value="logout" action="#{loginBean.logout}"/>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>                
+            </div>
 
-                            <td><h:link value="Cadastro de contatos" outcome="cadastro-contatos"/>|</td>         
-                            <td><h:link value="Principal" outcome="index"/>|</td>
-                            <td><h:form><h:commandLink value="Logout" action="#{loginBean.logout}"/></h:form></td>
-                        </tr>
-                    </tbody>
-                </table> 
-            </center>
-        </ui:insert>
+            <div class="container">
+                <ui:insert name="conteudo">Conteúdo</ui:insert>
+            </div>
+        </div>
 
-        <br></br>
-
-        <h:messages globalOnly="true" class="msg"/>
-
-        <hr></hr> 
-
-        <center>
-
-            <ui:insert name="conteudo">
-                <h1>
-                    Bem Vindo!
-                </h1>
-            </ui:insert>
-
-        </center>
-
-        <br></br>
-        <hr></hr>
-
-        <ui:insert name="rodape">
-            <h5>
-                Todos os direitos reservados SATC 2014.
-            </h5>
-
-        </ui:insert>
+        <div id="footer">
+            <div class="container">
+                <p class="text-muted">Todos os diretiros reservados</p>
+            </div>
+        </div>
     </h:body>
 </html>
-
