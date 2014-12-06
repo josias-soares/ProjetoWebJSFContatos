@@ -27,6 +27,25 @@
                         <f:facet name="header">Email</f:facet>
                         <h:outputLink value="mailto:#{contato.email}" target="_blank">#{contato.email}</h:outputLink>
                     </p:column>
+                    
+                    <p:column>
+                        <f:facet name="header">Telefone</f:facet>
+                        <a href="skype:'#{contato.telefone}'?call">#{contato.telefone}</a> 
+                        <h:outputLink id="telefone-detalhes" value="#" rendered="#{not empty contato.telefones and contato.telefones.size() > 1}">
+                            <span class="glyphicon glyphicon-phone-alt"></span>
+                        </h:outputLink>
+                        <p:overlayPanel  for="telefone-detalhes">  
+                            <h:dataTable class="table-condensed" var="telefone" value="#{contato.telefones}" rendered="#{not empty contato.telefones and contato.telefones.size() > 1}">
+                                <h:column>
+                                    <a href="skype:'#{telefone.numero}'?call">#{telefone.numero}</a> 
+                                </h:column>
+                                <h:column>
+                                    #{telefone.tipo.descricao}
+                                </h:column>
+                            </h:dataTable>
+                        </p:overlayPanel > 
+                    </p:column>
+
 
                     <p:column>
                         <f:facet name="header">Endereço</f:facet>
@@ -35,20 +54,27 @@
 
                     <p:column>
                         <f:facet name="header">Ações</f:facet>
-                        <h:link outcome="cadastro-contato">
+                        <h:link outcome="cadastro-contatos">
                             <span class="glyphicon glyphicon-edit"></span>
                             <f:param name="id" value="#{contato.id}"/>
                         </h:link>
-                        <p:commandLink>
+                        <p:commandLink action="#{listaContatosBean.remove(contato)}">
                             <p:confirm header="Confirmação" message="Deseja realmente remover?" icon="ui-icon-alert" />
                             <span class="glyphicon glyphicon-minus-sign"></span>
-                            <f:ajax listener="#{listaContatosBean.remove(contato)}" render="@form"/>
+         
                         </p:commandLink>
 
                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
                             <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
                             <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
-                        </p:confirmDialog>   
+                        </p:confirmDialog> 
+                        
+                        <h:outputLink id="detalhes" value="#" rendered="#{not empty contato.endereco}">
+                            <span class="glyphicon glyphicon-info-sign"></span>
+                        </h:outputLink>
+                        <p:overlayPanel for="detalhes">  
+                            <strong>Endereço: </strong> <h:outputText value="#{contato.endereco}"/>
+                        </p:overlayPanel > 
                     </p:column>
                 </p:dataTable>
             </fieldset>

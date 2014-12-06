@@ -5,39 +5,40 @@
  */
 package webjsf.controller;
 
-import java.sql.SQLException;
+import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIInput;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ValueChangeEvent;
-import webjsf.dao.ContatoDao;
-import webjsf.modelo.Contato;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
+import webjsf.model.Contato;
+import webjsf.model.ContatoRepository;
+import webjsf.model.Telefone;
 
 /**
  *
  * @author josias
  */
 @ManagedBean
-public class CadastroContatoBean {
-    
+@ViewScoped
+public class CadastroContatoBean  implements Serializable{
+
     private Contato contato = new Contato();
-    
-    /** 
-     * A anotação @ManagedProperty("#{param.id}") recuperará o parâmetro com nome id 
-     * e setará no atributo id do Managed Bean
-     */
-    @ManagedProperty("#{param.id}")
-    private Long id;
 
-    public Long getId() {
-        return id;
-    }
+    private Telefone telefoneSelecionado = novoTelefone();
 
-    public void setId(Long id) {
-        this.id = id;
+    @PostConstruct
+    public void init() {
+        String idParameter = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id");
+        if (idParameter != null) {
+            EntityManager em = getEntityManager();
+            this.contato = new ContatoRepository(em).buscaPorId(Long.valueOf(idParameter));
+        }
     }
 
     public Contato getContato() {
@@ -47,50 +48,74 @@ public class CadastroContatoBean {
     public void setContato(Contato contato) {
         this.contato = contato;
     }
-    
-    public String grava(){ 
-        try {
-            if(contato.getId() == 0 || contato.getId() == null ){
-                new ContatoDao().adiciona(contato);
-            }else{
-                new ContatoDao().altera(contato);
-            }            
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
-        
+
+    private EntityManager getEntityManager() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        EntityManager manager = (EntityManager) request.getAttribute("EntityManager");
+
+        return manager;
+    }
+
+    public String grava() {
+        EntityManager manager = getEntityManager();
+
+        new ContatoRepository(manager).adiciona(contato);
+
         return "lista-contatos?faces-redirect=true";
     }
-    /**
-     * O método é anotado com  @PostConstruct que garantirá que o 
-     * método será invocado após a criação do Managed Bean pelo JSF. 
-     * Neste método verificamos se estamos recebendo o id, caso ele seja diferente de nulo, 
-     * carregamos o contato através do método ContatoDao.buscarPorId.
-     */
-    @PostConstruct
-    public void init(){
-        if(id != null){
-            this.contato = new ContatoDao().buscarPorId(id);
-        }
-    }
-    
-    public void emailChanged(ValueChangeEvent event) {
-        String oldEmailValue = (String)event.getOldValue();
-        String newEmailValue = (String)event.getNewValue();
-        
-        if (newEmailValue != null && !newEmailValue.equals(oldEmailValue)) {
-            try {
-                Contato contato = new ContatoDao().buscarPorEmail(newEmailValue);
-                Long id = (Long) ((UIInput) event.getComponent().findComponent("id")).getValue();
 
-                if (contato != null && !contato.getId().equals(id) && newEmailValue.equals(contato.getEmail())) {
-                    FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, String.format("Email já cadastrado para o contato %s.", contato.getNome()), null);
-                    FacesContext.getCurrentInstance().addMessage(null, message);
-                }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+    public void emailChanged(ValueChangeEvent event) {
+        String oldEmailValue = (String) event.getOldValue();
+        String newEmailValue = (String) event.getNewValue();
+
+        System.out.println(oldEmailValue);
+        System.out.println(newEmailValue);
+
+        if (newEmailValue != null && !newEmailValue.equals(oldEmailValue)) {
+            EntityManager manager = getEntityManager();
+            Contato contato = new ContatoRepository(manager).buscaPorEmail(newEmailValue);
+            Long id = (Long) ((UIInput) event.getComponent().findComponent("id")).getValue();
+
+            if (contato != null && !contato.getId().equals(id) && newEmailValue.equals(contato.getEmail())) {
+                FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_WARN, String.format("Email já cadastrado para o contato %s.", contato.getNome()), null);
+                FacesContext.getCurrentInstance().addMessage(null, message);
             }
         }
     }
 
+    public void removeTelefone(Telefone telefone) {
+        contato.getTelefones().remove(telefone);
+    }
+
+    public void editaTelefone(Telefone telefone) {
+        telefoneSelecionado = telefone;
+    }
+
+    public Telefone novoTelefone() {
+        telefoneSelecionado = new Telefone();
+        return telefoneSelecionado;
+    }
+
+    public void adicionaTelefone() {
+        if (telefoneSelecionado.getNumero() == null) {
+            return;
+        }
+        contato.adicionaTelefone(telefoneSelecionado);
+
+        novoTelefone();
+    }
+
+    public Telefone getTelefoneSelecionado() {
+        return telefoneSelecionado;
+    }
+
+    public void setTelefoneSelecionado(Telefone telefoneSelecionadoNoForm) {
+        this.telefoneSelecionado = telefoneSelecionadoNoForm;
+    }
+
+    public Telefone.Tipo[] getTiposTelefone() {
+        return Telefone.Tipo.values();
+    }
 }

@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	 version="3.0">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <session-config>
         <session-timeout>
             30
@@ -39,15 +35,36 @@
         <param-value>bootstrap</param-value>
     </context-param>   
     
-    <!--  <filter>
-        <filter-name>Login</filter-name>
-        <filter-class>webjsf.controller.LoginFilter</filter-class>
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>webjsf.jsf.filter.LoginFilter</filter-class>
+    </filter>
+    
+    <filter>
+        <filter-name>JpaFilter</filter-name>
+        <filter-class>webjsf.jsf.filter.JpaFilter</filter-class>
     </filter>
     
     <filter-mapping>
-        <filter-name>/login</filter-name>
-        <url-pattern>/login.xhtml</url-pattern>
-    </filter-mapping> -->
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/lista-contatos.xhtml</url-pattern>
+    </filter-mapping>
     
-</web-app>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/cadastro-contato.xhtml</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>JpaFilter</filter-name>
+        <url-pattern>/lista-contatos.xhtml</url-pattern>
+    </filter-mapping>
+    
+    <filter-mapping>
+        <filter-name>JpaFilter</filter-name>
+        <url-pattern>/cadastro-contato.xhtml</url-pattern>
+    </filter-mapping>
 
+    
+   
+</web-app>

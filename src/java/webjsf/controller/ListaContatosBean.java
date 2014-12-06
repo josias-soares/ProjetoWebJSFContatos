@@ -5,13 +5,15 @@
  */
 package webjsf.controller;
 import java.io.Serializable;
-import java.sql.SQLException;
-import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import webjsf.dao.ContatoDao;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import webjsf.dao.ListaContatosDataModel;
-import webjsf.modelo.Contato;
+import webjsf.model.Contato;
+import webjsf.model.ContatoRepository;
 
 
 @ViewScoped
@@ -27,12 +29,24 @@ public class ListaContatosBean implements Serializable {
 
         return dataModel;
     }
+    
+    private EntityManager getEntityManager() {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        ExternalContext ec = fc.getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) ec.getRequest();
+        EntityManager manager = (EntityManager) request.getAttribute("EntityManager");
 
-    public List<Contato> buscaPorNome(String nome) throws SQLException {
-        return new ContatoDao().buscarPorNome(nome);
+        return manager;
     }
 
-    public void remove(Contato contato) throws SQLException {
-        new ContatoDao().deleta(contato);
+    public String remove(Contato contato){
+        EntityManager manager = getEntityManager();
+
+        new ContatoRepository(manager).remove(contato);
+
+        return "lista-contatos?faces-redirect=true";
     }
+    
+
+
 }

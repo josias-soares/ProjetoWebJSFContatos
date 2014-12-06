@@ -30,16 +30,71 @@
 
                 <div class="form-group">
                     <h:outputLabel value="Data de Nascimento" for="dataNascimento"/>
-                    <h:inputText id="dataNascimento" pt:type="date" styleClass="form-control"  value="#{cadastroContatoBean.contato.dataNascimento}" label="Data de Nascimento" required="true">
-                        <f:converter converterId="dateCalendarConverter"/>
-                        <f:ajax render="messages"/>
-                    </h:inputText>
+                    <p:calendar pattern="dd/MM/yyyy" id="dataNascimento"  styleClass="form-control calendar"  value="#{cadastroContatoBean.contato.dataNascimento}" >
+                        <f:converter converterId ="dateCalendarConverter"/>
+
+                        <f:ajax render="@this messages" execute="@this id"/>
+                    </p:calendar>
+                    <!--<h:inputText id="dataNascimento" pt:type="date" styleClass="form-control"  label="Data de Nascimento" required="true">
+                    </h:inputText>-->
                 </div>
 
                 <div class="form-group">
                     <h:outputLabel value="Endereço" for="endereco"/>
                     <h:inputText id="endereco" styleClass="form-control" label="Endereço" value="#{cadastroContatoBean.contato.endereco}"/>                
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h:outputLabel for="telefone" >Telefones</h:outputLabel>
+                    </div>
+                    <div class="panel-body">
+                        <h:panelGroup id="edicao-telefone" class="form-inline" >
+                            <h:inputHidden id="id-telefone" value="#{cadastroContatoBean.telefoneSelecionado.id}"/>
+                            <div class="form-group">
+                                <p:inputMask class="form-control" value="#{cadastroContatoBean.telefoneSelecionado.numero}" id="telefone" mask="(99) 9999-9999" pt:placeholder="Entre com o Telefone" />
+                            </div>
+                            <div class="form-group">
+                                <h:selectOneMenu id="tipo-telefone" value="#{cadastroContatoBean.telefoneSelecionado.tipo}" class="form-control" style="height: 34px">
+                                    <f:selectItems value="#{cadastroContatoBean.tiposTelefone}" var="tipo" itemLabel="#{tipo.descricao}"/>
+                                </h:selectOneMenu>
+                            </div>
+                            <h:commandLink class="btn btn-link" value="Adiciona">
+                                <span class="glyphicon glyphicon-link"/>
+                                <f:ajax listener="#{cadastroContatoBean.adicionaTelefone()}" execute="edicao-telefone" render="telefones-container edicao-telefone :form:messages" />
+                            </h:commandLink>
+                        </h:panelGroup>
+
+                        <h:panelGroup id="telefones-container">
+                            <h:dataTable  id="telefones" class="table table-hover" var="telefone" value="#{cadastroContatoBean.contato.telefones}" rendered="#{not empty cadastroContatoBean.contato.telefones}">
+                                <h:column>
+                                    <f:facet name="header">Número</f:facet>
+                                        #{telefone.numero}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Tipo</f:facet>
+                                        #{telefone.tipo.descricao}
+                                </h:column>
+                                <h:column>
+                                    <f:facet name="header">Ações</f:facet>
+                                    <h:commandLink>
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                        <f:ajax listener="#{cadastroContatoBean.editaTelefone(telefone)}" execute=":form:telefones-container" render=":form:edicao-telefone"/>
+                                    </h:commandLink>
+                                    <p:commandLink>
+                                        <p:confirm header="Confirmação" message="Deseja realmente remover?" icon="ui-icon-alert" />
+                                        <span class="glyphicon glyphicon-minus-sign"></span>
+                                        <f:ajax listener="#{cadastroContatoBean.removeTelefone(telefone)}" render=":form:telefones-container"/>
+                                    </p:commandLink>
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">  
+                                        <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>  
+                                        <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>       
+                                    </p:confirmDialog>                                 
+                                </h:column>
+                            </h:dataTable>
+                        </h:panelGroup>
+                    </div>
+                </div>
+
             </fieldset>
 
             <div class="btn-group">
